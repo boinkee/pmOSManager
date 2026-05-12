@@ -1,6 +1,6 @@
 # pmOSManager
 Basic python tool for managing your pmOS system through SSH.
-# What dis does?
+# What does this do?
 This tool helps managing your pmOS install.
 # Todo
 [✓] Basic functionality
@@ -15,5 +15,5 @@ This tool helps managing your pmOS install.
 [ ] Screenshot from pmOS device
 [ ] Filesystem navigation on device
 [ ] "pmOSManagerClient" on device manager
-# Who made dis?
+# Who made this?
 Me
