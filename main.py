@@ -57,7 +57,7 @@ def upgrade():
         return
     root.destroy()
     toor = tk.Tk()
-    toor.geometry(200x200)
+    toor.geometry("200x200")
     ssh(host)
     terminal = scrolledtext.ScrolledText(toor, width=75, height=20)
     terminal.pack(pady=10)
