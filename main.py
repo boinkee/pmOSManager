@@ -27,7 +27,7 @@ with open(CONFIG_FILE, "r") as f:
     config = json.load(f)
 pwd = config["pwd"]
 user = config["user"]
-def upup():
+def update():
     root = tk.Tk()
     root.withdraw() 
     host = simpledialog.askstring("APK update", "Host IP adress:")
@@ -35,37 +35,31 @@ def upup():
         messagebox.showerror("ERRER", "Input cannot be empty")
         return
     root.destroy()
-    toor = tk.Tk()
-    toor.title("APK Upgrade")
-    toor.geometry("640x300")
+    ssh(host)
     terminal = scrolledtext.ScrolledText(toor, width=75, height=20)
     terminal.pack(pady=10)
-    global ssh
-    try:
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(hostname=host, username=user, password=pwd)
-    
-    except Exception as e:
-        messagebox.showerror("ERROR", str(e))
-    
     command = f'echo "{pwd}" | sudo -S -p "" apk update'
     print ("command to be executed:" + command)
-    
-    try:
-        stdin, stdout, stderr = ssh.exec_command(command)
-        result = stdout.read().decode()
-        error = stderr.read().decode()
-        terminal.insert(tk.END, f"\n$ {command}\n")
-        terminal.insert(tk.END, result)
-        if error:
-            terminal.insert(tk.END, error)
-        terminal.see(tk.END)
-        terminal.insert(tk.END, "Updated\n")
-    except Exception as e:
-        terminal.insert(tk.END, f"ERROR: {e}\n")
-        print ("command to be executed:" + command)
-    
+    stdin, stdout, stderr = ssh.exec_command(command)
+    result = stdout.read().decode()
+    error = stderr.read().decode()
+    terminal.insert(tk.END, f"\n$ {command}\n")
+    terminal.insert(tk.END, result)
+    if error:
+        terminal.insert(tk.END, error)
+    terminal.see(tk.END)
+    terminal.insert(tk.END, "Updated\n")
+def upgrade():
+    root = tk.Tk()
+    root.withdraw() 
+    host = simpledialog.askstring("APK update", "Host IP adress:")
+    if not host:
+        messagebox.showerror("ERRER", "Input cannot be empty")
+        return
+    root.destroy()
+    ssh(host)
+    terminal = scrolledtext.ScrolledText(toor, width=75, height=20)
+    terminal.pack(pady=10)
     command = f'echo "{pwd}" | sudo -S -p "" apk upgrade'
     try:
         stdin, stdout, stderr = ssh.exec_command(command)
@@ -79,9 +73,31 @@ def upup():
         terminal.insert(tk.END, "Upgraded\n")
     except Exception as e:
         terminal.insert(tk.END, f"ERROR: {e}\n")
+def upup():
+    toor = tk.Tk()
+    toor.title("APK Upgrade")
+    toor.geometry("640x300")
+    ssh(host)
+    update()
+    upgrade()
     time.sleep(5)
     toor.destroy()
-
+def apkadd(apkadd):
+    terminal = scrolledtext.ScrolledText(toor, width=75, height=20)
+    terminal.pack(pady=10)
+    command = f'echo "{pwd}" | sudo -S -p "" apk add {apkadd}'
+    try:
+        stdin, stdout, stderr = ssh.exec_command(command)
+        result = stdout.read().decode()
+        error = stderr.read().decode()
+        terminal.insert(tk.END, f"\n$ {command}\n")
+        terminal.insert(tk.END, result)
+        if error:
+            terminal.insert(tk.END, error)
+        terminal.see(tk.END)
+        terminal.insert(tk.END, "Added\n")
+    except Exception as e:
+        terminal.insert(tk.END, f"ERROR: {e}\n")
 def console():
     root = tk.Tk()
     root.withdraw() 
@@ -91,15 +107,12 @@ def console():
         return
     root.destroy()
     ssh_command = f"ssh {user}@{host}"
-    try:
-        subprocess.Popen(
-            f'start cmd /k "{ssh_command}"',
-            shell=True
-        )
-    except Exception as e:
-        messagebox.showerror("ERRER", str(e))
-def exit():
-    root.destroy()
+    subprocess.Popen(f'start cmd /k "{ssh_command}"', shell=True)
+def ssh(ipaddr):
+    ssh = paramiko.SSHClient()
+    ssh.load_system_host_keys()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(hostname=ipaddr, username=user, password=pwd)
 def localinst():
     question = tk.Tk()
     question.withdraw()
@@ -109,10 +122,8 @@ def localinst():
     question.destroy()
     apk = tk.Tk()
     file = filedialog.askopenfilename(title="Open .apk file")
-    ssh = paramiko.SSHClient()
-    ssh.load_system_host_keys()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(hostname=ipaddr, username=user, password=pwd)
+    ip = simpledialog.askstring("Please input ip adddress", "Enter ip adress:")
+    ssh(ip)
     with SCPClient(ssh.get_transport()) as scp:
         scp.put(file, f"/home/{user}/{file}")
     messagebox.showinfo("File uploaded", "Step 1 completed")
@@ -127,10 +138,20 @@ def localinst():
     terminal.insert(tk.END, "Maybe installed?\n")
     messagebox.showinfo("Done", "Maybe installed, if you had the dependencies.")
     apk.destroy()
+def apkadd():
+    qaz = tk.Tk()
+    qaz.withdraw()
+    apks = simpledialog.askstring("APK add", "Please write the applications you want to install and make sure to use a comma when specifying multiple applications.")    
+    if not apk:
+        messagebox.showerror("ERRER", "Input cannot be empty")
+        return
+    ipadr = simpledialog.askstring("Enter ip", "Enter ip address")
+    ssh(ipadr)
+    
 def apk():
     window = tk.Tk()
     window.title("APK utils")
-    window.geometry("300x200")
+    window.geometry("300x300")
     window.resizable(False, False)
     title = tk.Label(window, text="APK Utils", font=("Times New Roman", 10))
     title.pack(pady=5)
@@ -138,6 +159,8 @@ def apk():
     upup_btn.pack(padx=10,pady=20)
     localinst_btn = tk.Button(window, text="Install .apk file locally", width=20, height=2, command=localinst)
     localinst_btn.pack(padx=10,pady=20)
+    apkadd_btn = tk.Button(window, text="APK add a package", width=20, height=2, command=apkadd)
+    apkadd_btn.pack(side="left", padx=10)
     window.mainloop()
 root = tk.Tk()
 root.title("pmOS manager")
