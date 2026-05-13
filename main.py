@@ -72,6 +72,7 @@ def upgrade():
             terminal.insert(tk.END, error)
         terminal.see(tk.END)
         terminal.insert(tk.END, "Upgraded\n")
+
 def upup():
     toor = tk.Tk()
     toor.title("APK Upgrade")
