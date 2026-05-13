@@ -5,8 +5,7 @@ import os
 import json
 import paramiko
 import time
-import subprocess
-import scp 
+import scp
 
 CONFIG_FILE = "config.json"
 
@@ -22,14 +21,14 @@ if not os.path.exists(CONFIG_FILE):
     with open(CONFIG_FILE, "w") as f:
         json.dump(data, f, indent=4)
     root_temp.destroy()
-    
+
 with open(CONFIG_FILE, "r") as f:
     config = json.load(f)
 pwd = config["pwd"]
 user = config["user"]
 def update():
     root = tk.Tk()
-    root.withdraw() 
+    root.withdraw()
     host = simpledialog.askstring("APK update", "Host IP adress:")
     if not host:
         messagebox.showerror("ERRER", "Input cannot be empty")
@@ -40,7 +39,7 @@ def update():
     terminal.pack(pady=10)
     command = f'echo "{pwd}" | sudo -S -p "" apk update'
     print ("command to be executed:" + command)
-    stdin, stdout, stderr = ssh.exec_command(command)
+    stdout, stderr = ssh.exec_command(command)
     result = stdout.read().decode()
     error = stderr.read().decode()
     terminal.insert(tk.END, f"\n$ {command}\n")
@@ -51,12 +50,14 @@ def update():
     terminal.insert(tk.END, "Updated\n")
 def upgrade():
     root = tk.Tk()
-    root.withdraw() 
+    root.withdraw()
     host = simpledialog.askstring("APK update", "Host IP adress:")
     if not host:
         messagebox.showerror("ERRER", "Input cannot be empty")
         return
     root.destroy()
+    toor = tk.Tk()
+    toor.geometry(200x200)
     ssh(host)
     terminal = scrolledtext.ScrolledText(toor, width=75, height=20)
     terminal.pack(pady=10)
@@ -71,8 +72,6 @@ def upgrade():
             terminal.insert(tk.END, error)
         terminal.see(tk.END)
         terminal.insert(tk.END, "Upgraded\n")
-    except Exception as e:
-        terminal.insert(tk.END, f"ERROR: {e}\n")
 def upup():
     toor = tk.Tk()
     toor.title("APK Upgrade")
@@ -100,7 +99,7 @@ def apkadd(apkadd):
         terminal.insert(tk.END, f"ERROR: {e}\n")
 def console():
     root = tk.Tk()
-    root.withdraw() 
+    root.withdraw()
     host = simpledialog.askstring("SSH console", "Host IP adress:")
     if not host:
         messagebox.showerror("ERRER", "Input cannot be empty")
@@ -113,7 +112,7 @@ def ssh(ipaddr):
     ssh.load_system_host_keys()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(hostname=ipaddr, username=user, password=pwd)
-def localinst():
+def locainst():
     question = tk.Tk()
     question.withdraw()
     terminal = scrolledtext.ScrolledText(question, width=75, height=20)
@@ -141,13 +140,13 @@ def localinst():
 def apkadd():
     qaz = tk.Tk()
     qaz.withdraw()
-    apks = simpledialog.askstring("APK add", "Please write the applications you want to install and make sure to use a comma when specifying multiple applications.")    
+    apks = simpledialog.askstring("APK add", "Please type the applications you want to install.")
     if not apk:
         messagebox.showerror("ERRER", "Input cannot be empty")
         return
     ipadr = simpledialog.askstring("Enter ip", "Enter ip address")
     ssh(ipadr)
-    
+
 def apk():
     window = tk.Tk()
     window.title("APK utils")
@@ -157,7 +156,7 @@ def apk():
     title.pack(pady=5)
     upup_btn = tk.Button(window, text="Update&Upgrade", width=20, height=2, command=upup)
     upup_btn.pack(padx=10,pady=20)
-    localinst_btn = tk.Button(window, text="Install .apk file locally", width=20, height=2, command=localinst)
+    localinst_btn = tk.Button(window, text="Install locally", width=20, height=2, command=locainst)
     localinst_btn.pack(padx=10,pady=20)
     apkadd_btn = tk.Button(window, text="APK add a package", width=20, height=2, command=apkadd)
     apkadd_btn.pack(side="left", padx=10)
