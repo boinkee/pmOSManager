@@ -62,17 +62,16 @@ def upgrade():
     terminal = scrolledtext.ScrolledText(toor, width=75, height=20)
     terminal.pack(pady=10)
     command = f'echo "{pwd}" | sudo -S -p "" apk upgrade'
-    try:
-        stdin, stdout, stderr = ssh.exec_command(command)
-        result = stdout.read().decode()
-        error = stderr.read().decode()
-        terminal.insert(tk.END, f"\n$ {command}\n")
-        terminal.insert(tk.END, result)
-        if error:
-            terminal.insert(tk.END, error)
-        terminal.see(tk.END)
-        terminal.insert(tk.END, "Upgraded\n")
-
+    stdin, stdout, stderr = ssh.exec_command(command)
+    result = stdout.read().decode()
+    error = stderr.read().decode()
+    terminal.insert(tk.END, f"\n$ {command}\n")
+    terminal.insert(tk.END, result)
+    if error:
+        terminal.insert(tk.END, error)
+    terminal.see(tk.END)
+    terminal.insert(tk.END, "Upgraded\n")
+    toor.destroy()
 def upup():
     toor = tk.Tk()
     toor.title("APK Upgrade")
