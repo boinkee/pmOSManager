@@ -1,3 +1,4 @@
+import docstring
 import tkinter as tk
 from tkinter import messagebox, simpledialog, scrolledtext, filedialog
 import subprocess
@@ -18,15 +19,16 @@ if not os.path.exists(CONFIG_FILE):
         "pwd": pwd,
         "user": user
     }
-    with open(CONFIG_FILE, "w") as f:
+    with open(CONFIG_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
     root_temp.destroy()
 
-with open(CONFIG_FILE, "r") as f:
+with open(CONFIG_FILE, "r", encoding="utf-8") as f:
     config = json.load(f)
 pwd = config["pwd"]
 user = config["user"]
 def update():
+    """Function for refreshing package lists."""
     root = tk.Tk()
     root.withdraw()
     host = simpledialog.askstring("APK update", "Host IP adress:")
@@ -51,6 +53,7 @@ def update():
     terminal.see(tk.END)
     terminal.insert(tk.END, "Updated\n")
 def upgrade():
+    """Function for upgrading the system."""
     root = tk.Tk()
     root.withdraw()
     host = simpledialog.askstring("APK update", "Host IP adress:")
@@ -75,6 +78,7 @@ def upgrade():
     terminal.insert(tk.END, "Upgraded\n")
     toor.destroy()
 def upup():
+    """Function for UPdating and UPgrading"""
     toor = tk.Tk()
     toor.title("APK Upgrade")
     toor.geometry("640x300")
@@ -84,22 +88,23 @@ def upup():
     time.sleep(5)
     toor.destroy()
 def apkadd(apkadd):
+    """Function for installing the specified package."""
     terminal = scrolledtext.ScrolledText(toor, width=75, height=20)
     terminal.pack(pady=10)
     command = f'echo "{pwd}" | sudo -S -p "" apk add {apkadd}'
-    try:
-        stdin, stdout, stderr = ssh.exec_command(command)
-        result = stdout.read().decode()
-        error = stderr.read().decode()
-        terminal.insert(tk.END, f"\n$ {command}\n")
-        terminal.insert(tk.END, result)
+    stdin, stdout, stderr = ssh.exec_command(command)
+    result = stdout.read().decode()
+    error = stderr.read().decode()
+    terminal.insert(tk.END, f"\n$ {command}\n")
+    terminal.insert(tk.END, result)
         if error:
-            terminal.insert(tk.END, error)
-        terminal.see(tk.END)
-        terminal.insert(tk.END, "Added\n")
+                terminal.insert(tk.END, error)
+    terminal.see(tk.END)
+    terminal.insert(tk.END, "Added\n")
     except Exception as e:
         terminal.insert(tk.END, f"ERROR: {e}\n")
 def console():
+    """Function for opening the ssh console. For just windows"""
     root = tk.Tk()
     root.withdraw()
     host = simpledialog.askstring("SSH console", "Host IP adress:")
@@ -110,11 +115,13 @@ def console():
     ssh_command = f"ssh {user}@{host}"
     subprocess.Popen(f'start cmd /k "{ssh_command}"', shell=True)
 def ssh(ipaddr):
+    """For connecting to the specified ssh address"""
     ssh = paramiko.SSHClient()
     ssh.load_system_host_keys()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(hostname=ipaddr, username=user, password=pwd)
 def locainst():
+    """For installing an APK package locally"""
     question = tk.Tk()
     question.withdraw()
     terminal = scrolledtext.ScrolledText(question, width=75, height=20)
@@ -139,7 +146,8 @@ def locainst():
     terminal.insert(tk.END, "Maybe installed?\n")
     messagebox.showinfo("Done", "Maybe installed, if you had the dependencies.")
     apk.destroy()
-def apkadd():
+def apkadduser():
+    """ For installing the user specified packages different than variable specified apkadd() function."""
     qaz = tk.Tk()
     qaz.withdraw()
     apks = simpledialog.askstring("APK add", "Please type the applications you want to install.")
@@ -150,6 +158,7 @@ def apkadd():
     ssh(ipadr)
 
 def apk():
+    """For APK utils."""
     window = tk.Tk()
     window.title("APK utils")
     window.geometry("300x300")
@@ -163,6 +172,7 @@ def apk():
     apkadd_btn = tk.Button(window, text="APK add a package", width=20, height=2, command=apkadd)
     apkadd_btn.pack(side="left", padx=10)
     window.mainloop()
+
 root = tk.Tk()
 root.title("pmOS manager")
 root.geometry("600x400")
