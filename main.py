@@ -89,6 +89,8 @@ def upup():
     toor.destroy()
 def apkadd(apkadd):
     """Function for installing the specified package."""
+    toor = tk.Tk()
+    toor.withdraw()
     terminal = scrolledtext.ScrolledText(toor, width=75, height=20)
     terminal.pack(pady=10)
     command = f'echo "{pwd}" | sudo -S -p "" apk add {apkadd}'
@@ -101,8 +103,6 @@ def apkadd(apkadd):
         terminal.insert(tk.END, error)
     terminal.see(tk.END)
     terminal.insert(tk.END, "Added\n")
-    except Exception as e:
-        terminal.insert(tk.END, f"ERROR: {e}\n")
 def console():
     """Function for opening the ssh console. For just windows"""
     root = tk.Tk()
@@ -169,7 +169,7 @@ def apk():
     upup_btn.pack(padx=10,pady=20)
     localinst_btn = tk.Button(window, text="Install locally", width=20, height=2, command=locainst)
     localinst_btn.pack(padx=10,pady=20)
-    apkadd_btn = tk.Button(window, text="APK add a package", width=20, height=2, command=apkadd)
+    apkadd_btn = tk.Button(window, text="APK add a package", width=20, height=2, command=apkadduser)
     apkadd_btn.pack(side="left", padx=10)
     window.mainloop()
 
