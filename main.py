@@ -35,6 +35,8 @@ def update():
         return
     root.destroy()
     ssh(host)
+    toor = tk.Tk()
+    toor.withdraw()
     terminal = scrolledtext.ScrolledText(toor, width=75, height=20)
     terminal.pack(pady=10)
     command = f'echo "{pwd}" | sudo -S -p "" apk update'
