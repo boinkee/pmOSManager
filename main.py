@@ -97,8 +97,8 @@ def apkadd(apkadd):
     error = stderr.read().decode()
     terminal.insert(tk.END, f"\n$ {command}\n")
     terminal.insert(tk.END, result)
-        if error:
-                terminal.insert(tk.END, error)
+    if error:
+        terminal.insert(tk.END, error)
     terminal.see(tk.END)
     terminal.insert(tk.END, "Added\n")
     except Exception as e:
