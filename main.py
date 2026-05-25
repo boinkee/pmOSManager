@@ -1,4 +1,3 @@
-import docstring
 import tkinter as tk
 from tkinter import messagebox, simpledialog, scrolledtext, filedialog
 import subprocess
@@ -7,6 +6,7 @@ import json
 import paramiko
 import time
 import scp
+import docstring
 
 CONFIG_FILE = "config.json"
 
@@ -147,7 +147,7 @@ def locainst():
     messagebox.showinfo("Done", "Maybe installed, if you had the dependencies.")
     apk.destroy()
 def apkadduser():
-    """ For installing the user specified packages different than variable specified apkadd() function."""
+    """ For installing the user specified packages different than variable specified apkadd()."""
     qaz = tk.Tk()
     qaz.withdraw()
     apks = simpledialog.askstring("APK add", "Please type the applications you want to install.")
