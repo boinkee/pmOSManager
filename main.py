@@ -1,19 +1,19 @@
-'''for gui'''
 import tkinter as tk
-'''from gui for gui'''
+'''for gui'''
 from tkinter import messagebox, simpledialog, scrolledtext, filedialog
-'''for executing processes'''
+'''for gui again'''
 import subprocess
-'''same as subprocess'''
+'''for processing'''
 import os
-'''json reading and writing'''
+'''commands'''
 import json
-'''ssh things'''
+'''json shyt'''
 import paramiko
-'''timing'''
+'''ssh'''
 import time
-'''file transporansportatiation'''
+'''timing'''
 import scp
+'''file transfer'''
 
 CONFIG_FILE = "config.json"
 
