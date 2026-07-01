@@ -6,7 +6,6 @@ import json
 import paramiko
 import time
 import scp
-import docstring
 
 CONFIG_FILE = "config.json"
 
