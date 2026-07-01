@@ -20,7 +20,6 @@ jobs:
         pip install pylint
         pip install scp
         pip install paramiko
-        pip install docstring
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
