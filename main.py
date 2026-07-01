@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import messagebox, simpledialog, scrolledtext, filedialog
 '''for executing processes'''
 import subprocess
-'''same as subprocess''''
+'''same as subprocess'''
 import os
 '''json reading and writing'''
 import json
